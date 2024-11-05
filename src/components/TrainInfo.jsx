@@ -3,6 +3,7 @@ const TrainInfo = ({train, timeTableRow}) => {
   return <div>
     <h1>Train info</h1>
     <div>Train number: {train.trainNumber}</div>
+    <div>{timeTableRow.type}</div>
     <div>Scheduled time: {timeTableRow.scheduledTime}</div>
     <div>Actual time: {timeTableRow.actualTime}</div>
     <div>Difference in minutes: {timeTableRow.differenceInMinutes}</div>

@@ -7,7 +7,7 @@ const TrainsSelector = ({trains, handleChange}) => {
         {
           trains.map(train => (
             <option key={train.trainNumber+train.departureDate} value={`${train.trainNumber} ${train.departureDate}`}>
-              {`${train.trainNumber} ${train.departureDate}`}
+              {`${train.trainType} ${train.trainNumber} ${train.departureDate}`}
             </option>
           ))
         }

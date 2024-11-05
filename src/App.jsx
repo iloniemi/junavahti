@@ -33,16 +33,22 @@ function App() {
 
   const handleTrainChange = event => {
     const newData = event.target.value
+    
     if (newData === '') return
     const [newTrainNumber, departureDate] = newData.split(' ')
 
     const selectedTrain = trains.find(train => 
       train.trainNumber.toString() === newTrainNumber && train.departureDate === departureDate
     )
-    const newTimeTableRow = selectedTrain.timeTableRows.find(row => row.stationShortCode === station.stationCode)
+    const newTimeTableRow = selectedTrain.timeTableRows.reverse().find(row => 
+      row.stationShortCode === station.stationCode
+    )
     setTrain(selectedTrain)
     setTimeTableRow(newTimeTableRow)
+    console.log('Train:', selectedTrain)
   }
+
+  
 
   return (
     <>
@@ -52,7 +58,5 @@ function App() {
     </>
   )
 }
-
-
 
 export default App
