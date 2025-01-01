@@ -1,12 +1,12 @@
-const TrainInfo = ({train, timeTableRow}) => {
-  if (!timeTableRow) return <></> 
-  return <div>
-    <h1>Train info</h1>
-    <div>Train number: {train.trainNumber}</div>
-    <div>{timeTableRow.type}</div>
-    <div>Scheduled time: {timeTableRow.scheduledTime}</div>
-    <div>Actual time: {timeTableRow.actualTime}</div>
-    <div>Difference in minutes: {timeTableRow.differenceInMinutes}</div>
+import TimetableRow from "./TimetableRow"
+
+const TrainInfo = ({train, station}) => {
+  if (!train) return <></>
+  const rows = train.timeTableRows.filter(row => row.stationShortCode == station.stationCode)
+
+  return <div className='data'>
+    {rows.map(row => <TimetableRow key={row.stationShortCode + row.commercialTrack + row.scheduledTime} 
+                                   row={row}/>)}
   </div>
 }
 

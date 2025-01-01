@@ -2,12 +2,14 @@ import axios from "axios"
 
 const baseUrl = 'https://rata.digitraffic.fi/api/v1/'
 
-const getTrains = (stationCode) => {
+const getLiveTrainsByStation = (stationCode) => {
   const request = axios.get(`${baseUrl}live-trains/station/${stationCode}`)
   return request.then(response => {
       return response.data
     })
 }
+
+
 
 const getTrain = (train) =>{
   const request = axios.get(`${baseUrl}/trains/${train.departureDate}/${train.trainNumber}`)
@@ -16,4 +18,4 @@ const getTrain = (train) =>{
   })
 }
 
-export default {getTrains, getTrain}
+export default {getLiveTrainsByStation, getTrain}
