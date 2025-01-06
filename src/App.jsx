@@ -5,6 +5,10 @@ import TrainInfo from './components/TrainInfo'
 import StationSelector from './components/StationSelector'
 import TrainsSelector from './components/TrainsSelector'
 import TrainsSelectorButtons from './components/TrainsSelectorButtons'
+import StationMap from './components/StationMap'
+import { all } from 'axios'
+import StationSelectorButtons from './components/StationSelectorButtons'
+
 
 const dateToInputFormat = (date) => {
   const year = date.getFullYear()
@@ -17,12 +21,12 @@ const dateToInputFormat = (date) => {
 function App() {
   const stations = [
     {
-      name: "Jyväskylä",
-      stationCode: "JY"
+      stationName: "Jyväskylä",
+      stationShortCode: "JY"
     },
     {
-      name: "Ähtäri",
-      stationCode: "ÄHT"
+      stationName: "Ähtäri",
+      stationShortCode: "ÄHT"
     }
   ]
   
@@ -31,33 +35,25 @@ function App() {
   const [station, setStation] = useState('')
   const [appStatus, setAppSatus] = useState('start') // start, trains
   const [date, setDate] = useState(dateToInputFormat(new Date()))
+  const [searchPoint, setSearchPoint]= useState({longitude: 24.064036, latitude: 62.553265})
+  const [stationsToShow, setStationsToShow] = useState(stations)
 
   const handleStationChange = async ( event ) => {
     const selectedStationName = event.target.value
     if (selectedStationName === '') return
-    const selectedStation = stations.find(station => station.name === selectedStationName)
+    const selectedStation = stations.find(station => station.stationName === selectedStationName)
     setStation(selectedStation)
     setTrain(undefined)
+
+    const newTrains = await trainService.getTrainsByDateAndStation(date, selectedStation)
+    /*
     const newTrains = await trainService.getLiveTrainsByStation(selectedStation.stationCode)
     const filteredTrains = newTrains.filter(train => train.departureDate === date)
-                                    .filter(train => train.trainCategory !== 'Cargo')
+    .filter(train => train.trainCategory !== 'Cargo')
     
-    setTrains(filteredTrains)
+    */
+    setTrains(newTrains)
     setAppSatus('trains')
-  }
-
-  const handleTrainChange = event => {
-    const newData = event.target.value
-    
-    if (newData === '') return
-    const [newTrainNumber, departureDate] = newData.split(' ')
-
-    const selectedTrain = trains.find(train => 
-      train.trainNumber.toString() === newTrainNumber && train.departureDate === departureDate
-    )
-
-    setTrain(selectedTrain)
-    console.log('Train:', selectedTrain)
   }
 
   const handleTrainChangeButtonClick = (train) => () => {
@@ -77,6 +73,37 @@ function App() {
     setDate(dateString)
   }
 
+  const handleTestButton = (event) => {
+    const allStations = trainService.getPassengerStations()
+    console.log('all stations', allStations);
+  }
+
+  const handleTestImgClick = (event) => {
+    console.log('event', event)
+    console.log('client', event.clientX, event.clientY)
+    console.log('screen', event.screenX, event.screenY);
+    console.log('page', event.pageX, event.pageY);
+    const rect = event.target.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+
+    console.log('calculated', x, y);
+  
+  }
+
+  const handleCanvasClick = (event, point, filteredStations) => {
+    const x = event.nativeEvent.offsetX
+    const y = event.nativeEvent.offsetY
+    //console.log('click', event);
+    //console.log(x,y, point);
+    setSearchPoint(point)
+    //console.log('filteredStationsAtAppClickHandle', filteredStations);
+    //console.log('stationsToShowAtApp', stationsToShow);
+    
+    
+    setStationsToShow(filteredStations)
+  }
+
   if (appStatus == 'start') {
     const maxDate = new Date()
     maxDate.setDate(new Date().getDate() + 1)
@@ -84,16 +111,19 @@ function App() {
     const minDate = new Date()
     minDate.setDate(new Date().getDate() - 1)
     
-
+    
     return <>
+      <h1>Stations</h1>
+      <StationMap handleClick={handleCanvasClick} searchPoint={searchPoint} />
+      <button onClick={handleTestButton}>TEST</button>
+      <StationSelectorButtons stations={stationsToShow} />
       <StationSelector stations={stations} handleChange={handleStationChange} />
       <div>
         <h1>Date</h1>
         <input type="date"
                onChange={handleDateChange}
                value={date}
-               max={dateToInputFormat(maxDate)}
-               min={dateToInputFormat(minDate)}
+
         ></input>
       </div>
     </>
@@ -103,7 +133,7 @@ function App() {
     return <>
       <div className='container'>
          <div className='container'>
-                      <h2>{station.name} - {date}</h2>
+                      <h2>{station.stationName} - {date}</h2>
                       <div onClick={handleStationReset} className='styled-button'>
                         Change station / date
                       </div>

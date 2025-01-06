@@ -18,7 +18,8 @@ const TimetableRow = ({row}) => {
 }
 
 const timeFromDateTime = (dateTime) => {
-  return dateTime.substring(11, 16)
+  const date = new Date(dateTime)
+  return `${date.getHours()}:${date.getMinutes()}`
 }
 
 export default TimetableRow

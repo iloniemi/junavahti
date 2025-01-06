@@ -5,7 +5,7 @@ const StationSelector = ({stations, handleChange}) => {
       <option value='' disabled>Select station</option>
         {
           stations.map(station => (
-            <option key={station.stationCode} value={station.name}>{station.name}</option>
+            <option key={station.stationShortCode} value={station.stationName}>{station.stationName}</option>
           ))
         }
       </select>
