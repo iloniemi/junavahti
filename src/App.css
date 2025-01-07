@@ -90,7 +90,42 @@ h2 {
   margin: 4px;
 }
 
+.station-map-selection {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.station-map {
+  flex: 0, 0, auto;
+  cursor: pointer;
+  display: inline-block;
+  aspect-ratio: 1 / 2;
+}
+
+.station-buttons {
+  flex: 1, 1, auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  min-width: 150px;
+  max-width: calc(100% - 190px);
+}
+
+.station-buttons div {
+  flex: auto;
+  text-align: center;
+}
+
+.date-selection {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 input[type="date"] {
+  box-shadow: 0px 0px 2px 1px var(--text), 0px 0px 2px 1px var(--text) inset;
+  font-size: large;
   background-color: var(--background);
   text-shadow: 0px 0px 3px var(--text);
   font-family: 'Orbitron', sans-serif;

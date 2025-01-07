@@ -1,9 +1,14 @@
-const StationSelectorButtons = ({stations}) => {
+const StationSelectorButtons = ({stations, handleClick}) => {
   console.log('stations', stations);
-  return <div className="container">
+  return <div className="container station-buttons">
         {
           stations.map(station => (
-            <div key={station.stationShortCode}>{station.stationName}</div>
+            <div key={station.stationShortCode}
+                 onClick={handleClick(station)}
+                 className="styled-button"
+            >
+              {station.stationName}
+            </div>
           ))
         }
   </div>

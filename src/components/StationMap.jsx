@@ -93,6 +93,7 @@ const StationMap = ({handleClick, searchPoint}) => {
     ref={canvasRef}
     width={mapWidth}
     height={mapHeight}
+    className='station-map container'
     />
   }
   
