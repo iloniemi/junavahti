@@ -70,6 +70,9 @@ h2 {
   min-width: max-content;
   max-width: max-content;
   text-align: center;
+  max-height: calc(100vh - 10em);
+  overflow: auto;
+  scrollbar-width: none;
 }
 
 .data {
@@ -114,6 +117,20 @@ h2 {
 }
 
 .station-buttons div {
+  flex: auto;
+  text-align: center;
+}
+
+.traintype-buttons {
+  flex: 1, 1, auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  min-width: 150px;
+  max-width: 100%;
+}
+
+.traintype-buttons div {
   flex: auto;
   text-align: center;
 }

@@ -19,7 +19,9 @@ const TimetableRow = ({row}) => {
 
 const timeFromDateTime = (dateTime) => {
   const date = new Date(dateTime)
-  return `${date.getHours()}:${date.getMinutes()}`
+  const hours = date.getHours() > 9 ? date.getHours() : '0'.concat(date.getHours())
+  const minutes = date.getMinutes() > 9 ? date.getMinutes() : '0'.concat(date.getMinutes())
+  return `${hours}:${minutes}`
 }
 
 export default TimetableRow

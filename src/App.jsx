@@ -6,6 +6,7 @@ import StationSelector from './components/StationSelector'
 import TrainsSelectorButtons from './components/TrainsSelectorButtons'
 import StationMap from './components/StationMap'
 import StationSelectorButtons from './components/StationSelectorButtons'
+import TrainTypeSelector from './components/TrainTypeSelector'
 
 
 const dateToInputFormat = (date) => {
@@ -35,12 +36,19 @@ function App() {
   const [date, setDate] = useState(dateToInputFormat(new Date()))
   const [searchPoint, setSearchPoint]= useState({longitude: 24.064036, latitude: 62.553265})
   const [stationsToShow, setStationsToShow] = useState(stations)
+  const [trainType, setTrainType] = useState(undefined)
+  
+  const filteredTrains = trains.filter(train => {
+    if (trainType === undefined) return true
+    return train.trainType === trainType
+  })
 
   const handleStationChange = async ( event ) => {
     const selectedStationName = event.target.value
     if (selectedStationName === '') return
     const selectedStation = trainService.getPassengerStations().find(station => station.stationName === selectedStationName)
     
+
     await switchToTrainsOfStationView(selectedStation)
     /*
     setStation(selectedStation)
@@ -76,6 +84,7 @@ function App() {
     setStation('')
     setTrains([])
     setTrain(undefined)
+    setTrainType(undefined)
     setAppStatus('start')
   }
 
@@ -124,12 +133,17 @@ function App() {
     return <>
       <div className='container'>
          <div className='container'>
-                      <h2>{station.stationName} - {date}</h2>
                       <div onClick={handleStationReset} className='styled-button'>
-                        Change station / date
+                      ◀◀ Station & date selection
                       </div>
+                      <h2>{station.stationName} - {date}</h2>
                     </div>
-        <TrainsSelectorButtons trains={trains} handleClick={handleTrainChangeButtonClick} selectedTrain={train} />
+        <TrainTypeSelector trains={trains} handleSelect={setTrainType} selectedTrainType={trainType} />
+        <TrainsSelectorButtons trains={filteredTrains}
+                               handleClick={handleTrainChangeButtonClick}
+                               selectedTrain={train}
+                               selectedStation={station}
+        />
         <TrainInfo train={train} station={station} />
       </div>
     </>
