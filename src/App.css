@@ -155,3 +155,17 @@ select {
   font-family: 'Orbitron', sans-serif;
   color: var(--text);
 }
+
+/* background: */
+progress::-webkit-progress-bar {background-color: var(--background); width: 100%;}
+progress {background-color: var(--background);}
+
+/* value: */
+progress::-webkit-progress-value {background-color: var(--text) !important;}
+progress::-moz-progress-bar {background-color: var(--text) !important;}
+progress {
+  color: var(--text);
+  border-color: red;
+  border: solid;
+  border-width: 2px;
+}

@@ -1,15 +1,11 @@
 import { useState } from "react"
 
 
-const TrainsSelectorButtons = ({trains, handleClick, selectedTrain, selectedStation}) => {
+const TrainsSelectorButtons = ({trains, handleClick, selectedStation}) => {
 
   return <div className='sidebar'>
     { trains.map(train => {
       let elementClass = 'styled-button'
-      if (selectedTrain && selectedTrain.trainNumber == train.trainNumber
-        && selectedTrain.departureDate == train.departureDate) {
-          elementClass = elementClass.concat(' chosen') 
-      }
 
       const rows = train.timeTableRows
       const rowsFiltered = rows.filter(row => row.stationShortCode === selectedStation.stationShortCode)
