@@ -1,6 +1,8 @@
 import suomi from '../assets/suomi2.png'
 import { useRef, useEffect } from 'react'
 import trainService from '../services/trains'
+import styled from 'styled-components'
+import theme from '../theme'
 
 const mapWidth = 150
 const mapHeight = 300
@@ -44,12 +46,12 @@ const StationMap = ({handleClick, searchPoint}) => {
               const pointY = yDegreeToPixels * (mapEdges.north - station.latitude)
               context.beginPath()
               context.arc(pointX, pointY, dotRadius, 0, Math.PI * 2)
-              context.fillStyle = '#cffcff'//'#34ebc0'
+              context.fillStyle = theme.colors.secondary; //'#ff0004'//'#34ebc0'
               context.fill()
             })
             
     context.lineWidth = 2
-    context.strokeStyle = '#34ebc0'
+    context.strokeStyle = theme.colors.primary; //'#34ebc0'
     const pointX = xDegreeToPixels * (searchPoint.longitude - mapEdges.west)
     const pointY = yDegreeToPixels * (mapEdges.north - searchPoint.latitude)
     context.strokeRect(pointX - searchRangePixels,
@@ -86,24 +88,31 @@ const StationMap = ({handleClick, searchPoint}) => {
     handleClick(event, clickCoordinates, filteredStations)
   }
 
+  return (
+    <MapContainer>
+      <MapCanvas
+        onClick={handleClickEvent}
+        ref={canvasRef}
+        width={mapWidth}
+        height={mapHeight}
+        className='station-map container'
+      />
+    </MapContainer>
+  );
+};
 
-  return <canvas
-  style={canvasStyle}
-    onClick={handleClickEvent}
-    ref={canvasRef}
-    width={mapWidth}
-    height={mapHeight}
-    className='station-map container'
-    />
-  }
-  
-const canvasStyle = {
-  //height: `${mapHeight}px`,
-  //width: `${mapWidth}px`,
-  backgroundColor: '#0a2b24',
-  backgroundImage: `url(${suomi})`,
-  backgroundSize: '100% 100%', // Adjust to fit the canvas
-  backgroundPosition: 'center', // Center the image
-}
+const MapContainer = styled.div`
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: min-content;
+  width: min-content;
+`
+const MapCanvas = styled.canvas`
+  background: transparent;
+  background-image: ${`url(${suomi})`};
+  background-size: 100% 100%; // Adjust to fit the canvas
+  background-position: 'center'; // Center the image
+`;
+
 
 export default StationMap

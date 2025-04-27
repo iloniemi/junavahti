@@ -7,7 +7,7 @@ const TimetableRow = ({row}) => {
   } = row
 
   return <div>
-    {type}<br/>
+    <b>{type}</b><br/>
     Scheduled: {timeFromDateTime(scheduledTime)}<br/>
     {liveEstimateTime ? `Estimated: ${timeFromDateTime(liveEstimateTime)}` : ''}
     {liveEstimateTime ? <br/> : ''}

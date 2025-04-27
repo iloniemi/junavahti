@@ -1,17 +1,21 @@
+import Button from "./Button";
+import Container from "./Container";
+
 const StationSelectorButtons = ({stations, handleClick}) => {
   console.log('stations', stations);
-  return <div className="container station-buttons">
+  return <Container>
         {
           stations.map(station => (
-            <div key={station.stationShortCode}
+            <Button key={station.stationShortCode}
                  onClick={handleClick(station)}
-                 className="styled-button"
             >
               {station.stationName}
-            </div>
+            </Button>
           ))
         }
-  </div>
+  </Container>
 }
+
+
 
 export default StationSelectorButtons

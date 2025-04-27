@@ -4,7 +4,8 @@ import trainService from '../services/trains';
 import TrainTypeSelector from "./TrainTypeSelector";
 import TrainsSelectorButtons from "./TrainsSelectorButtons";
 import TrainInfo from "./TrainInfo";
-import { dateToInputFormat } from '../utils'
+import { dateToInputFormat } from '../utils';
+import Container from "./Container";
 
 
 
@@ -32,7 +33,7 @@ const TrainsSelector = () => {
   if (trains.length === 0) return <><div>Loading</div></>
 
   const filteredTrains = trains.filter(train => {
-    if (trainType === undefined) return true
+    if (trainType === undefined) return true;
     return train.trainType === trainType
   });
 
@@ -43,16 +44,15 @@ const TrainsSelector = () => {
   return (
     <>
       <div className='container'>
-         <div className='container'>
+         <Container>
           <h2>{station.stationName}</h2>
-        </div>
+        </Container>
         <TrainTypeSelector trains={trains} handleSelect={setTrainType} selectedTrainType={trainType} />
         <TrainsSelectorButtons
           handleClick={handleTrainSelect}
           trains={filteredTrains}
           selectedStation={station}
-        /> 
-        <TrainInfo train={trains[0]} station={station} />
+        />
       </div>
     </>
   );

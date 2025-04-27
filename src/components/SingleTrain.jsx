@@ -3,9 +3,13 @@ import TimetableRow from "./TimetableRow"
 import { useEffect, useState } from "react";
 import trainService from '../services/trains';
 import { dateToInputFormat } from "../utils";
+import Container from "./Container";
+import Button from "./Button";
+import styled from "styled-components";
+import theme from "../theme";
 
 const SingleTrain = () => {
-  const  params = useParams();
+  const params = useParams();
   const trainNumber = params.trainNumber;
   const stationShortCode = params.stationShortCode;
   const [train, setTrain] = useState(undefined);
@@ -55,10 +59,6 @@ const SingleTrain = () => {
     };
   }, [train]);
 
-  const notify = () => {
-    new Notification('Hello');
-  };
-
   const startTracking = (target) => {
     console.log('starting tracking', target);
     setTracking(target);
@@ -104,30 +104,69 @@ const SingleTrain = () => {
   const timePercentage = timer/trackingInterval*100;
 
   return (
-    <div>
-      <div className='data'>
-        <div><b>{`${train.trainType} ${train.trainNumber}`}</b></div>
-        {rows.map(row => <TimetableRow key={row.stationShortCode + row.commercialTrack + row.scheduledTime} 
-                                      row={row}/>)}
-      </div>
-      <div>
-
-      {tracking && <div>
-        <div>Tracking {tracking}</div>
-        <div>Refresh in {timeTillRefresh}</div>
-        <progress id="refreshTimer" value={timePercentage} max="100"></progress>
-        <div className='styled-button' onClick={ stopTracking } >Stop tracking</div>
-      </div>}
-      {!tracking && <div>
-        <div className='styled-button' onClick={ () => startTracking('DEPARTURE') } >Track departure</div>
-        <div className='styled-button' onClick={ () => startTracking('ARRIVAL') } >Track arrival</div>
-      </div>}
-        <div className='styled-button' onClick={ fetchAndSetTrain }>Update train info</div>
-      </div>
-        <div>Nofications {Notification.permission}</div>
-        <div className='styled-button' onClick={ notify }>Test notification</div>
-    </div>
+    <>
+      <Container>
+        <h1>{`${train.trainType} ${train.trainNumber}`}</h1>
+      </Container>
+      <TrainContainer>
+        <Container column >
+          {rows.map(row => <TimetableRow key={row.stationShortCode + row.commercialTrack + row.scheduledTime} 
+                                        row={row}/>)}
+        </Container>
+        <TrackingContainer>
+          {tracking && <div>
+            <TrackingInfoContainer>
+              <div>Tracking {tracking}</div>
+              <div>Refresh in {timeTillRefresh} s</div>
+              <ProgressBar value={timePercentage} max="100"></ProgressBar>
+            </TrackingInfoContainer>
+            <Button onClick={ stopTracking } >Stop tracking</Button>
+          </div>}
+          {!tracking && <div>
+            <Button onClick={ () => startTracking('DEPARTURE') } >Track departure</Button>
+            <Button onClick={ () => startTracking('ARRIVAL') } >Track arrival</Button>
+          </div>}
+            <Button onClick={ fetchAndSetTrain }>Update train info</Button>
+        </TrackingContainer>
+      </TrainContainer>
+    </>
   );
 }
+
+const TrackingInfoContainer = styled.div`
+  margin: 4px;
+  padding: 4px;
+`;
+
+
+const TrackingContainer = styled(Container)`
+  flex-direction: column;
+`;
+
+const TrainContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const ProgressBar = styled.progress`
+    background-color: ${theme.colors.background};
+    color: ${theme.colors.primary};
+    border-color: red;
+    border: solid;
+    border-width: 2px;
+    
+    &::-webkit-progress-bar {
+      background-color: ${theme.colors.background};
+      width: 100%;
+    }
+  
+  &::-webkit-progress-value {
+    background-color: ${theme.colors.primary} !important;
+  }
+  &::-moz-progress-bar {
+    background-color: ${theme.colors.primary} !important;
+  }
+`;
 
 export default SingleTrain

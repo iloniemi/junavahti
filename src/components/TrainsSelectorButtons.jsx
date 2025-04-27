@@ -1,9 +1,9 @@
-import { useState } from "react"
-
+import Button from "./Button"
+import Container from "./Container"
 
 const TrainsSelectorButtons = ({trains, handleClick, selectedStation}) => {
 
-  return <div className='sidebar'>
+  return <Container>
     { trains.map(train => {
       let elementClass = 'styled-button'
 
@@ -14,14 +14,13 @@ const TrainsSelectorButtons = ({trains, handleClick, selectedStation}) => {
         return biggestDelay > row.differenceInMinutes ? biggestDelay : row.differenceInMinutes
       }, undefined)
 
-      return <div key={train.trainNumber+train.departureDate}
+      return <Button key={train.trainNumber+train.departureDate}
               onClick={handleClick(train)}
-              className={elementClass}
              > 
               {`${train.trainType} ${train.trainNumber} ${delay > 0 ? '⏱️' :''}`}
-             </div>
+             </Button>
     })}
-  </div>
+  </Container>
 }
 
 
